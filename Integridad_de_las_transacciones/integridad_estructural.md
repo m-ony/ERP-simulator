@@ -274,3 +274,7 @@ finally:
 ## Conclusión
 
 El esquema actual tiene una base sólida: llaves primarias en todas las tablas, llaves foráneas en todas las relaciones y códigos únicos en los catálogos. Sus principales debilidades son la **falta de validaciones `CHECK`**, los **IDs fijos en los seeds**, la **ausencia de una política de borrado explícita** y la posibilidad de **materiales sin inventario o productos sin BOM**. Aplicar las propuestas anteriores haría que la base rechace por sí misma los datos que hoy podrían hacer fallar el cálculo de faltantes del MRP.
+
+
+Comentarios 
+Para asegurar la integridad de las transacciones en nuestro ERP, es clave manejar bloques atómicos (BEGIN, COMMIT, ROLLBACK) desde Python para evitar que la base de datos quede a medias si algo falla, usar SELECT ... FOR UPDATE en el inventario para evitar que dos ventas al mismo tiempo alteren mal el stock (condiciones de carrera), y respaldarlo todo con restricciones CHECK en SQL para que la propia base rechace números negativos o datos corruptos aunque la aplicación falle.
